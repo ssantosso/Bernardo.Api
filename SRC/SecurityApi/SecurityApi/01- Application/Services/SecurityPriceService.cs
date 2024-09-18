@@ -9,20 +9,18 @@ public class SecurityPriceService : ISecurityPriceService
     {
         _repo = repo;
     }
-    public async Task<bool> AddSecurityPrices(string isin)
+    public async Task<bool> AddSecurityPrices(IEnumerable<string> isins)
     {
         try
         {
-            if (IsinValid(isin))
+            foreach (var item in isins)
             {
-                var prices = await _repo.GetAllPriceByISIN(isin);
-                foreach (var price in prices)
+                if (IsinValid(item))
                 {
-                    if (IsinValid(price.ISIN))
-                        await _repo.AddSecurityPrices(price);
+                    var _isinprice = await _repo.GetPriceByISIN(item);
+                    await _repo.AddSecurityPrices(_isinprice);
                 }
             }
-            
             return true;
         }
         catch (Exception)

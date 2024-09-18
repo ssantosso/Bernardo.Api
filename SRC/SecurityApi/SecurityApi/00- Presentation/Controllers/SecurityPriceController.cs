@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SecurityApi.Application.Interfaces;
+using SecurityApi.Presentation.ViewModels;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -7,7 +8,7 @@ namespace SecurityApi.Presentation.Controllers;
 
 [ApiController]
 [ExcludeFromCodeCoverage]
-[Route("securityprice")]
+[Route("securityprices")]
 public class SecurityPriceController : Controller
 {
     private readonly ISecurityPriceService _services;
@@ -15,13 +16,11 @@ public class SecurityPriceController : Controller
     {
         _services = services;
     }
-    [HttpPatch("{isin}")]
+    [HttpPost("")]
     [SwaggerResponse(StatusCodes.Status200OK, null, typeof(IEnumerable<bool>), "application/json")]
-    public async Task<IActionResult> AddISIN([FromRoute] string isin)
+    public async Task<IActionResult> AddISIN([FromBody] SecurityPriceViewModel vm)
     {
-        var result = await _services.AddSecurityPrices(isin);
-
-
+        var result = await _services.AddSecurityPrices(vm.ISINs);
         return Ok(new
         {
             Data = result
