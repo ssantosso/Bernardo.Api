@@ -1,4 +1,5 @@
 ﻿using SecurityApi.Application.Interfaces;
+using SecurityApi.Domain.Entities;
 using SecurityApi.Infra.Data.Interfaces;
 
 namespace SecurityApi.Application.Services;
@@ -15,9 +16,10 @@ public class SecurityPriceService : ISecurityPriceService
         {
             foreach (var item in isins)
             {
-                if (IsinValid(item))
+                var _security = new SecurityPrice(item);
+                if (_security.IsValid())
                 {
-                    var _isinprice = await _repo.GetPriceByISIN(item);
+                    var _isinprice = await _repo.GetPriceByISIN(_security);
                     await _repo.AddSecurityPrices(_isinprice);
                 }
             }
@@ -27,15 +29,6 @@ public class SecurityPriceService : ISecurityPriceService
         {
             return false;
         }
-
-    }
-
-    private bool IsinValid(string iSIN)
-    {
-        if (!string.IsNullOrEmpty(iSIN) && iSIN.Length == 12)
-            return true;
-
-        return false;
 
     }
 }

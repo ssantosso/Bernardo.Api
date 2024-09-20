@@ -14,12 +14,12 @@ namespace SecurityApi.Infra.Data.Repository
             //_context.DbSet.Add(securityPrice);
         }
        
-        public async Task<SecurityPrice> GetPriceByISIN(string isin)
+        public async Task<SecurityPrice> GetPriceByISIN(SecurityPrice isin)
         {
             //httpcliente
-            // go to https://securities.dataprovider.com/securityprice/{isin} e retorna a lista
-            
-            return new SecurityPrice(isin, 150.00);
+            // go to https://securities.dataprovider.com/securityprice/{isin} e retorna o price do security
+            isin.SetPrice(150.00);
+            return isin;
         }
     }
 }

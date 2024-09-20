@@ -7,7 +7,7 @@ using SecurityApi.Infra.Data.Interfaces;
 namespace SecurityApiTests.Services;
 
 [TestFixture]
-public class Tests
+public class ServiceTests
 {
     private Mock<ISecurityPriceRepository> _repoMock;
     private SecurityPriceService _service;
@@ -39,7 +39,7 @@ public class Tests
     public async Task ISIN_WhenIsValidAddPrice_ReturnTrue()
     {
         // Arrange
-        _repoMock.Setup(r => r.GetPriceByISIN(iSINPrice)).ReturnsAsync(new SecurityPrice(iSINPrice, 150.00));
+        _repoMock.Setup(r => r.GetPriceByISIN(_isinprice)).ReturnsAsync(new SecurityPrice(iSINPrice, 150.00));
         _repoMock.Setup(r => r.AddSecurityPrices(It.IsAny<SecurityPrice>())).Returns(Task.CompletedTask);
 
         // Act
@@ -54,7 +54,7 @@ public class Tests
     public async Task ISIN_WhenIsInValid_NotAddPrice()
     {
         // Arrange
-        _repoMock.Setup(r => r.GetPriceByISIN(iSINPriceInvalid)).ReturnsAsync(_isinpriceInvalid);
+        _repoMock.Setup(r => r.GetPriceByISIN(_isinpriceInvalid)).ReturnsAsync(_isinpriceInvalid);
         _repoMock.Setup(r => r.AddSecurityPrices(It.IsAny<SecurityPrice>())).Returns(Task.CompletedTask);
 
         // Act
@@ -68,8 +68,8 @@ public class Tests
     public async Task ISIN_WhenOneIsValidAndOneIsInValid_AddJustOnPrice()
     {
         // Arrange
-        _repoMock.Setup(r => r.GetPriceByISIN(iSINPriceInvalid)).ReturnsAsync(_isinpriceInvalid);
-        _repoMock.Setup(r => r.GetPriceByISIN(iSINPrice)).ReturnsAsync(_isinprice);
+        _repoMock.Setup(r => r.GetPriceByISIN(_isinpriceInvalid)).ReturnsAsync(_isinpriceInvalid);
+        _repoMock.Setup(r => r.GetPriceByISIN(_isinprice)).ReturnsAsync(_isinprice);
         _repoMock.Setup(r => r.AddSecurityPrices(It.IsAny<SecurityPrice>())).Returns(Task.CompletedTask);
 
         var list = new List<string>();
